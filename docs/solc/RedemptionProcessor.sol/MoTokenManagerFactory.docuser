@@ -1,0 +1,16 @@
+{
+  "kind": "user",
+  "methods":
+  {
+    "addTokenManager(address,address,address,uint64,address)":
+    {
+      "notice": "Adds MoTokenManager for a given MoToken"
+    },
+    "linkJrTokenToSrToken(bytes32,bytes32)":
+    {
+      "notice": "Links a Junior token to Senior token."
+    }
+  },
+  "notice": "This contract creates MoTokenManager for a given MoToken.  This also gives us a way to get MoTokenManager give a token symbol.",
+  "version": 1
+}

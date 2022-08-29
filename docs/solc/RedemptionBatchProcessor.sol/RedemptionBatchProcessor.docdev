@@ -1,0 +1,155 @@
+{
+  "kind": "dev",
+  "methods":
+  {
+    "cancelRedeemRequest(uint256)":
+    {
+      "params":
+      {
+        "_id": "Batch id where the redeem request is to be cancelled"
+      }
+    },
+    "constructor":
+    {
+      "details": "In addition to the above, the constructor is also assigning USDC as default refund coin",
+      "params":
+      {
+        "_tokenManager": "Token manager address"
+      }
+    },
+    "createRedeemRequest(uint256)":
+    {
+      "params":
+      {
+        "_tokens": "The amount of tokens to redeem"
+      }
+    },
+    "fulfillBatch(uint256,uint256)":
+    {
+      "params":
+      {
+        "_amount": "The Fiat amount which is used to issue refunds, should be shifted by 4 decimals (same as mo token)",
+        "_id": "Batch Id"
+      }
+    },
+    "getBatchRequestDetails(uint256,address)":
+    {
+      "params":
+      {
+        "_id": "Batch Id",
+        "_user": "Address of user who has raised the redemption request"
+      },
+      "returns":
+      {
+        "pending": "Requested amount pending",
+        "request": "Total requested amount"
+      }
+    },
+    "getBatchTokensPending(uint256)":
+    {
+      "params":
+      {
+        "_id": "Batch Id"
+      },
+      "returns":
+      {
+        "tokens": "Amount of tokens pending"
+      }
+    },
+    "getBatchUsers(uint256)":
+    {
+      "params":
+      {
+        "_id": "Batch Id"
+      },
+      "returns":
+      {
+        "userList": "Array of all the users who have raised redemption request"
+      }
+    },
+    "getLockedTokens()":
+    {
+      "returns":
+      {
+        "_tokens": "Amount of tokens locked"
+      }
+    },
+    "setAccessControlManagerAddress(address)":
+    {
+      "params":
+      {
+        "_accessControlManagerAddress": "Set accessControlManagerAddress to this address"
+      }
+    },
+    "setAssignedRefundCoin(bytes32)":
+    {
+      "params":
+      {
+        "_coin": "Refund coin symbol"
+      }
+    },
+    "setCurrencyOracleAddress(address)":
+    {
+      "params":
+      {
+        "_currencyOracleAddress": "address of the currency oracle"
+      }
+    },
+    "setFiatCurrency(bytes32)":
+    {
+      "params":
+      {
+        "_fiatCurrency": "fiatCureency"
+      }
+    }
+  },
+  "stateVariables":
+  {
+    "MO_DECIMALS":
+    {
+      "details": "All assets are stored with 4 decimal shift"
+    },
+    "accessControlManagerAddress":
+    {
+      "details": "Implements RWA manager and whitelist access"
+    },
+    "allBatches":
+    {
+      "details": "An array of all the Batch instances created till date"
+    },
+    "assignedRefundCoin":
+    {
+      "details": "The refund is always issued in a fixed assigned stablecoin"
+    },
+    "batchHead":
+    {
+      "details": "Index of the batches which are yet to be fulfilled"
+    },
+    "batchTail":
+    {
+      "details": "Index beyond the latest batch"
+    },
+    "currencyOracleAddress":
+    {
+      "details": "Currency Oracle Address contract associated with the batch processor"
+    },
+    "decimalsDiff":
+    {
+      "details": "Exponent of the difference between the decimals of MoToken and assigned refund coin"
+    },
+    "fiatCurrency":
+    {
+      "details": "Assigned fiat currency for the token"
+    },
+    "stableCoinAddress":
+    {
+      "details": "stableCoin Address contract used for stable coin operations"
+    },
+    "tokenManagerAddress":
+    {
+      "details": "Token manager contract associated with the batch processor"
+    }
+  },
+  "title": "Token Redemption Batch Processor",
+  "version": 1
+}

@@ -1,0 +1,159 @@
+{
+  "kind": "dev",
+  "methods":
+  {
+    "createRedeemRequest(bytes32,uint256)":
+    {
+      "params":
+      {
+        "_requestTokens": "Amount of tokens to be requested",
+        "_tokenSymbol": "Symbol of the token for which request details are to be created"
+      }
+    },
+    "createRequestToTokenMapping(bytes32)":
+    {
+      "params":
+      {
+        "_tokenSymbol": "Symbol of the token for which request details are to be created"
+      }
+    },
+    "fulfill(bytes32,uint256,uint256)":
+    {
+      "params":
+      {
+        "_amount": "Amount is in fiat curreny with motoken decimals shifted",
+        "_index": "Index of the request to be fulfilled",
+        "_tokenSymbol": "Symbol of the token for which request details are to be fulfilled"
+      }
+    },
+    "getRedemptionRequestDetailsByAddress(bytes32,address)":
+    {
+      "params":
+      {
+        "_requestor": "Address of the user for which request details are to be retrieved",
+        "_tokenSymbol": "Symbol of the token for which request details are to be retrieved"
+      },
+      "returns":
+      {
+        "length": "Length of the array of request details for a user"
+      }
+    },
+    "getRequestDetailsById(bytes32,uint256)":
+    {
+      "params":
+      {
+        "_requestId": "Index of the request details to be retrieved",
+        "_tokenSymbol": "Symbol of the token for which request details are to be retrieved"
+      },
+      "returns":
+      {
+        "requestTokens": "Requested tokens for a request",
+        "requestTokensPending": "Requested tokens pending for a request",
+        "requestor": "address of a requestor for a request"
+      }
+    },
+    "getRequestDetailsByIdAndRequestor(bytes32,uint256,address)":
+    {
+      "params":
+      {
+        "_requestId": "Index of the request details to be retrieved",
+        "_tokenSymbol": "Symbol of the token for which request details are to be retrieved",
+        "requestor": "Address of the requestor"
+      },
+      "returns":
+      {
+        "id": "Redemption request index",
+        "requestTokens": "Requested tokens for a request",
+        "requestTokensPending": "Requested tokens pending for a request"
+      }
+    },
+    "getTotalRequest(bytes32)":
+    {
+      "params":
+      {
+        "_tokenSymbol": "Symbol of the token for which request count is to be retrieved"
+      },
+      "returns":
+      {
+        "totalRequest": "count for the token symbol"
+      }
+    },
+    "modifyRedeemRequest(bytes32,uint256,uint256)":
+    {
+      "params":
+      {
+        "_requestTokens": "Amount of tokens to be updated in the request",
+        "_tokenSymbol": "Symbol of the token for which request details are to be modified",
+        "index": "Index of the request to be modified"
+      }
+    },
+    "setAccessControlManager(address)":
+    {
+      "params":
+      {
+        "_accessControlManager": "Set accessControlManagerAddress to this address"
+      }
+    },
+    "setAssignedRefundCoin(bytes32)":
+    {
+      "params":
+      {
+        "_coin": "Refund coin symbol"
+      }
+    },
+    "setCurrencyOracleAddress(address)":
+    {
+      "params":
+      {
+        "_currencyOracle": "address of the currency oracle"
+      }
+    },
+    "setTokenManagerFactoryAddress(address)":
+    {
+      "params":
+      {
+        "_tokenManagerFactoryAddress": "Set tokenManagerFactoryAddress to this address"
+      }
+    }
+  },
+  "stateVariables":
+  {
+    "MO_DECIMALS":
+    {
+      "details": "All assets are stored with 4 decimal shift"
+    },
+    "accessControlManager":
+    {
+      "details": "Implements RWA manager and whitelist access"
+    },
+    "allTokenRequestsDetails":
+    {
+      "details": "An array of all redemption request details for each token"
+    },
+    "assignedRefundCoin":
+    {
+      "details": "The refund is always issued in a fixed assigned stablecoin"
+    },
+    "currencyOracle":
+    {
+      "details": "Currency Oracle Address contract associated with the batch processor"
+    },
+    "decimalsDiff":
+    {
+      "details": "Exponent of the difference between the decimals of MoToken and assigned refund coin"
+    },
+    "stableCoin":
+    {
+      "details": "stableCoin Address contract used for stable coin operations"
+    },
+    "tokenManagerFactoryAddress":
+    {
+      "details": "tokenManagerFactoryAddress Address which stores the token manager address for each token"
+    },
+    "tokenSymbolToId":
+    {
+      "details": "Mapping stores all the tokens symbols and their index in the allTokenRequestsDetails array"
+    }
+  },
+  "version": 1
+}

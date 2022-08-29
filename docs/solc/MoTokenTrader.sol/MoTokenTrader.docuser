@@ -1,0 +1,32 @@
+{
+  "kind": "user",
+  "methods":
+  {
+    "cancelListing(uint256)":
+    {
+      "notice": "Cancel an existing listing"
+    },
+    "createNewListing(bytes32,uint256,int256)":
+    {
+      "notice": "Create a new listing"
+    },
+    "editListing(uint256,uint256,int256)":
+    {
+      "notice": "Edit an existing listing"
+    },
+    "purchaseFromListing(uint256,uint256,bytes32)":
+    {
+      "notice": "Purchase tokens from a given Listing"
+    },
+    "setAccessControlManagerAddress(address)":
+    {
+      "notice": "Setter for accessControlManagerAddress"
+    },
+    "setCurrencyOracleAddress(address)":
+    {
+      "notice": "Allows setting currencyOracleAddress"
+    }
+  },
+  "notice": "This contract handles P2P trade listing and purchase of tokens",
+  "version": 1
+}

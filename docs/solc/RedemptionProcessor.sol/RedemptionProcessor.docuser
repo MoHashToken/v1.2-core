@@ -1,0 +1,55 @@
+{
+  "kind": "user",
+  "methods":
+  {
+    "createRedeemRequest(bytes32,uint256)":
+    {
+      "notice": "Creates a request for a token for a user for a given amount of tokens & stores the request details in allTokenRequestsDetails array"
+    },
+    "createRequestToTokenMapping(bytes32)":
+    {
+      "notice": "creates request details for a token and stores it in allTokenRequestsDetails array & stores the token symbol and its index in tokenSymbolToId mapping"
+    },
+    "fulfill(bytes32,uint256,uint256)":
+    {
+      "notice": "fulfill a request for a token symbol for a user for a given amount of stable coin & updates the request details in allTokenRequestsDetails array"
+    },
+    "getRedemptionRequestDetailsByAddress(bytes32,address)":
+    {
+      "notice": "Gets the request details for a token symbol by user address"
+    },
+    "getRequestDetailsById(bytes32,uint256)":
+    {
+      "notice": "Gets the request details for a token symbol by index"
+    },
+    "getRequestDetailsByIdAndRequestor(bytes32,uint256,address)":
+    {
+      "notice": "Gets the request details for a token symbol by index and requestor"
+    },
+    "getTotalRequest(bytes32)":
+    {
+      "notice": "Gets the total request count for a token symbol"
+    },
+    "modifyRedeemRequest(bytes32,uint256,uint256)":
+    {
+      "notice": "Modifies a request for a token for a user for a given amount of tokens & updates the request details in allTokenRequestsDetails array"
+    },
+    "setAccessControlManager(address)":
+    {
+      "notice": "Setter for setAccessControlManager"
+    },
+    "setAssignedRefundCoin(bytes32)":
+    {
+      "notice": "Setter for assigned refund coin"
+    },
+    "setCurrencyOracleAddress(address)":
+    {
+      "notice": "Allows setting currencyOracleAddress"
+    },
+    "setTokenManagerFactoryAddress(address)":
+    {
+      "notice": "Setter for setTokenManagerFactoryAddress"
+    }
+  },
+  "version": 1
+}

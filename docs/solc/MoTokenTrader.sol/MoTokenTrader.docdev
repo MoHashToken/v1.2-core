@@ -1,0 +1,95 @@
+{
+  "kind": "dev",
+  "methods":
+  {
+    "cancelListing(uint256)":
+    {
+      "params":
+      {
+        "_id": "listing id"
+      }
+    },
+    "createNewListing(bytes32,uint256,int256)":
+    {
+      "params":
+      {
+        "_price": "Price of listing per token should be shifted by 4 decimals (same as MoH token)",
+        "_tokenSymbol": "Symbol of the token listed",
+        "_tokens": "The amount of tokens to redeem"
+      }
+    },
+    "editListing(uint256,uint256,int256)":
+    {
+      "params":
+      {
+        "_id": "Listing id",
+        "_price": "Update price of this listing",
+        "_tokens": "Update tokens in this listing"
+      }
+    },
+    "purchaseFromListing(uint256,uint256,bytes32)":
+    {
+      "params":
+      {
+        "_amount": "Stable coin amount used for purchase should be shifted by 4 decimals (same as MoH token)",
+        "_id": "Id of the listing to be purchased",
+        "_stableCoin": "Token symbol of the stable coin used"
+      }
+    },
+    "setAccessControlManagerAddress(address)":
+    {
+      "params":
+      {
+        "_accessControlManagerAddress": "Set accessControlManagerAddress to this address"
+      }
+    },
+    "setCurrencyOracleAddress(address)":
+    {
+      "params":
+      {
+        "_currencyOracleAddress": "address of the currency oracle"
+      }
+    }
+  },
+  "stateVariables":
+  {
+    "MO_DECIMALS":
+    {
+      "details": "All assets are stored with 4 decimal shift"
+    },
+    "accessControlManagerAddress":
+    {
+      "details": "Implements RWA manager and whitelist access"
+    },
+    "allListings":
+    {
+      "details": "An array of all the listing instances created till date"
+    },
+    "currencyOracleAddress":
+    {
+      "details": "Currency Oracle Address contract associated with the batch processor"
+    },
+    "listingHead":
+    {
+      "details": "Index of the listings which are yet to be closed"
+    },
+    "listingTail":
+    {
+      "details": "Index beyond the last listing"
+    },
+    "stableCoinAddress":
+    {
+      "details": "stableCoin Address contract used for stable coin operations"
+    },
+    "tokenManagerFactoryAddress":
+    {
+      "details": "Token manager factory address"
+    },
+    "totalTokensListedOf":
+    {
+      "details": "Mapping stores the total tokens listed by the users/addresses for a symbol"
+    }
+  },
+  "title": "Token Trade Listing Contract",
+  "version": 1
+}

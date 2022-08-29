@@ -1,0 +1,16 @@
+{
+  "kind": "user",
+  "methods":
+  {
+    "getFeedLatestPriceAndDecimals(bytes32,bytes32)":
+    {
+      "notice": "to get latest price and decimals"
+    },
+    "setOracleFeedAddress(bytes32,bytes32,address)":
+    {
+      "notice": "Allows adding mapping b/w encoded bytes32 of currecies and chainLink Date Feed proxy Address"
+    }
+  },
+  "notice": "This handles all the operations related currency exchange",
+  "version": 1
+}

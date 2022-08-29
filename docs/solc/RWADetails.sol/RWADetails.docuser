@@ -1,0 +1,20 @@
+{
+  "kind": "user",
+  "methods":
+  {
+    "setAccessControlManagerAddress(address)":
+    {
+      "notice": "Setter for accessControlManagerAddress"
+    },
+    "setCurrencyOracleAddress(address)":
+    {
+      "notice": "Allows setting currencyOracleAddress"
+    },
+    "setLeapYear(bool)":
+    {
+      "notice": "Setter for leapYear"
+    }
+  },
+  "notice": "This contract stores the real world assets for the protocol",
+  "version": 1
+}

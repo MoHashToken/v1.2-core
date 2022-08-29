@@ -1,0 +1,55 @@
+{
+  "kind": "user",
+  "methods":
+  {
+    "burn(uint256,address)":
+    {
+      "notice": "Burns tokens from the given address"
+    },
+    "constructor":
+    {
+      "notice": "Constructor which only serves as passthrough for _tokenName and _tokenSymbol"
+    },
+    "decimals()":
+    {
+      "notice": "Overrides decimals() function to restrict decimals to 4"
+    },
+    "isUnderwriter(address)":
+    {
+      "notice": "Returns if the address is an underwriter"
+    },
+    "linkToJuniorToken(address)":
+    {
+      "notice": "Link to a Junior token"
+    },
+    "linkToSeniorToken(address)":
+    {
+      "notice": "Link to a Senior token"
+    },
+    "receiveStableCoins(address,address,uint256)":
+    {
+      "notice": "Transfers stablecoins from an external address to self"
+    },
+    "receiveTokens(address,uint256)":
+    {
+      "notice": "Transfers MoTokens from an external address to self"
+    },
+    "setAccessControlManagerAddress(address)":
+    {
+      "notice": "Setter for accessControlManagerAddress"
+    },
+    "setTradability(bool)":
+    {
+      "notice": "Setter for isTradable"
+    },
+    "transferStableCoins(address,address,uint256)":
+    {
+      "notice": "Transfers stablecoins from self to an external address"
+    },
+    "transferTokens(address,uint256)":
+    {
+      "notice": "Transfers MoTokens from self to an external address"
+    }
+  },
+  "version": 1
+}

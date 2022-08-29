@@ -1,0 +1,206 @@
+{
+  "kind": "dev",
+  "methods":
+  {
+    "creditPipeFiat(uint64,uint32)":
+    {
+      "params":
+      {
+        "_amount": "the amount by which RWA manager is increasing the pipeFiatStash of the MoH token",
+        "_date": "RWA manager is crediting pipe fiat for this date"
+      }
+    },
+    "debitPipeFiat(uint64,uint32)":
+    {
+      "params":
+      {
+        "_amount": "the amount by which RWA manager is decreasing the pipeFiatStash of the MoH token",
+        "_date": "RWA manager is debiting pipe fiat for this date"
+      }
+    },
+    "getNAV()":
+    {
+      "returns":
+      {
+        "_0": "tokenData.nav NAV of the MoH token"
+      }
+    },
+    "initialize(uint16,address,address,uint64,address)":
+    {
+      "params":
+      {
+        "_id": "MoToken Id",
+        "_initNAV": "Initial NAV value",
+        "_rWADetails": "RWADetails contract address",
+        "_stableCoin": "StableCoin contract address",
+        "_token": "token address"
+      }
+    },
+    "purchase(uint256,bytes32)":
+    {
+      "details": "tokenData.nav has the NAV (in USD) of the MoH token. The number of MoH tokens to mint = _depositAmount (in USD) / NAV",
+      "params":
+      {
+        "_depositAmount": "is the amount in stable coin (decimal shifted) that the purchaser wants to pay to buy MoH tokens",
+        "_depositCurrency": "is the token that purchaser wants to pay with (eg: USDC, USDT etc)"
+      }
+    },
+    "setAccessControlManagerAddress(address)":
+    {
+      "params":
+      {
+        "_accessControlManagerAddress": "Set accessControlManagerAddress to this address"
+      }
+    },
+    "setCurrencyOracleAddress(address)":
+    {
+      "params":
+      {
+        "_currencyOracleAddress": "address of the currency oracle"
+      }
+    },
+    "setFee(uint32)":
+    {
+      "params":
+      {
+        "_fee": "platform fee"
+      }
+    },
+    "setFiatCurrency(bytes32)":
+    {
+      "params":
+      {
+        "_fiatCurrency": "fiatCurrency"
+      }
+    },
+    "setLinkedSrRwaUnitId(uint256)":
+    {
+      "params":
+      {
+        "_unitId": "Senior RWA Unit ID"
+      }
+    },
+    "setNavDeviationAllowance(uint16)":
+    {
+      "params":
+      {
+        "_value": "Allowed deviation limit (Eg: 10 for 10% deviation)"
+      }
+    },
+    "setPlatformFeeCurrency(bytes32)":
+    {
+      "params":
+      {
+        "_feeCurrency": "platform fee currency"
+      }
+    },
+    "setRWADetailsAddress(address)":
+    {
+      "params":
+      {
+        "_rWADetails": "Address of contract storing RWADetails"
+      }
+    },
+    "setStableCoinAddress(address)":
+    {
+      "params":
+      {
+        "_stableCoinAddress": "Set stableCoin to this address"
+      }
+    },
+    "setTokenSupplyLimit(uint256)":
+    {
+      "params":
+      {
+        "_tokenSupplyLimit": "limit to be set for the token supply"
+      }
+    },
+    "stableCoinToTokens(uint256,bytes32)":
+    {
+      "params":
+      {
+        "_amount": "Stable coin amount",
+        "_stableCoin": "Stable coin symbol"
+      },
+      "returns":
+      {
+        "tokens": "Calculated token amount"
+      }
+    },
+    "sweepFeeToGov(uint256)":
+    {
+      "params":
+      {
+        "amount": "fee transfer amount in fiat currency"
+      }
+    },
+    "updateFiatInTransit(uint64)":
+    {
+      "params":
+      {
+        "_fiatAmount": "fiat amount (4 decimal shifted)"
+      }
+    },
+    "updateNav(uint32)":
+    {
+      "details": "getTotalAssetValue gets value of all RWA units held by this MoH token plus stablecoin balances held by this MoH token. tokenData.pipeFiatStash gets the Fiat balances against this MoH token",
+      "params":
+      {
+        "_timestamp": "Timestamp for which NAV is calculated"
+      }
+    }
+  },
+  "stateVariables":
+  {
+    "MO_DECIMALS":
+    {
+      "details": "All assets are stored with 4 decimal shift"
+    },
+    "accessControlManagerAddress":
+    {
+      "details": "Implements RWA manager and whitelist access"
+    },
+    "accruedPlatformFee":
+    {
+      "details": "Accrued fee amount charged by the platform"
+    },
+    "currencyOracleAddress":
+    {
+      "details": "OraclePriceExchange Address contract associated with the stable coin"
+    },
+    "fiatCurrency":
+    {
+      "details": "fiatCurrency associated with tokens"
+    },
+    "linkedSrRwaUnitId":
+    {
+      "details": "Holds the corresponding senior RWA Unit ID of the junior token"
+    },
+    "platformFeeCurrency":
+    {
+      "details": "platform fee currency associated with tokens"
+    },
+    "rWADetails":
+    {
+      "details": "RWA Details contract address which stores real world asset details"
+    },
+    "stableCoinAddress":
+    {
+      "details": "stableCoin Address contract used for stable coin operations"
+    },
+    "token":
+    {
+      "details": "Address of the associated MoToken"
+    },
+    "tokenDecimals":
+    {
+      "details": "Holds exponential value for MO token decimals"
+    },
+    "tokenSupplyLimit":
+    {
+      "details": "Limits the total supply of the token."
+    }
+  },
+  "title": "Token manager for open/senior token",
+  "version": 1
+}

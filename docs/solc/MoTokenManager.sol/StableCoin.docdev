@@ -1,0 +1,152 @@
+{
+  "kind": "dev",
+  "methods":
+  {
+    "addStableCoin(bytes32,address,address)":
+    {
+      "details": "There can be no duplicate entries for same stablecoin symbol",
+      "params":
+      {
+        "_contractAddress": "Stablecoin contract address on chain",
+        "_pipeAddress": "Pipe address associated with the stablecoin",
+        "_symbol": "Stablecoin symbol"
+      }
+    },
+    "balanceOf(bytes32,address)":
+    {
+      "params":
+      {
+        "_address": "User address",
+        "_symbol": "Stablecoin symbol"
+      },
+      "returns":
+      {
+        "_0": "uint Returns the stablecoin balance"
+      }
+    },
+    "checkForSufficientBalance(address,bytes32,uint256)":
+    {
+      "params":
+      {
+        "_address": "Address holding the tokens",
+        "_amount": "amount to check",
+        "_symbol": "Symbol of the token"
+      }
+    },
+    "decimals(bytes32)":
+    {
+      "params":
+      {
+        "_tokenSymbol": "Token symbol"
+      },
+      "returns":
+      {
+        "_0": "uint8 ERC20 decimals() value"
+      }
+    },
+    "deleteStableCoin(bytes32)":
+    {
+      "params":
+      {
+        "_symbol": "Stablecoin symbol"
+      }
+    },
+    "getStableCoinsAssociated()":
+    {
+      "returns":
+      {
+        "_0": "bytes32[] Stable coins accepted by the token"
+      }
+    },
+    "initiateTransferFrom(address,address,uint256,bytes32)":
+    {
+      "params":
+      {
+        "_amount": "Amount to transfer",
+        "_from": "Transfer tokens from this address",
+        "_symbol": "Symbol of the tokens to transfer",
+        "_token": "Token address"
+      },
+      "returns":
+      {
+        "_0": "bool Boolean indicating transfer success/failure"
+      }
+    },
+    "setAccessControlManagerAddress(address)":
+    {
+      "params":
+      {
+        "_accessControlManagerAddress": "Set accessControlManagerAddress to this address"
+      }
+    },
+    "setCurrencyOracleAddress(address)":
+    {
+      "params":
+      {
+        "_currencyOracleAddress": "address of the currency oracle"
+      }
+    },
+    "totalBalanceInFiat(address,bytes32)":
+    {
+      "params":
+      {
+        "_fiatCurrency": "Fiat currency used",
+        "_token": "Token address"
+      },
+      "returns":
+      {
+        "balance": "Stablecoin balance"
+      }
+    },
+    "transferFundsToPipe(address,bytes32,uint256)":
+    {
+      "params":
+      {
+        "_amount": "Amount to transfer",
+        "_symbol": "Symbol of the tokens to transfer",
+        "_token": "Token address"
+      },
+      "returns":
+      {
+        "_0": "bool Boolean indicating transfer success/failure"
+      }
+    }
+  },
+  "stateVariables":
+  {
+    "MO_DECIMALS":
+    {
+      "details": "All assets are stored with 4 decimal shift"
+    },
+    "accessControlManagerAddress":
+    {
+      "details": "Implements RWA manager and whitelist access"
+    },
+    "accruedPlatformFee":
+    {
+      "details": "Accrued fee amount charged by the platform"
+    },
+    "contractAddressOf":
+    {
+      "details": "Mapping points to the address where the stablecoin contract is deployed on chain"
+    },
+    "currencyOracleAddress":
+    {
+      "details": "OraclePriceExchange Address contract associated with the stable coin"
+    },
+    "pipeAddressOf":
+    {
+      "details": "Mapping points to the pipe address where the stablecoins to be converted to fiat are transferred"
+    },
+    "platformFeeCurrency":
+    {
+      "details": "platform fee currency associated with tokens"
+    },
+    "stableCoinsAssociated":
+    {
+      "details": "Array of all stablecoins added to the contract"
+    }
+  },
+  "title": "Stable coin manager",
+  "version": 1
+}

@@ -1,0 +1,52 @@
+{
+  "kind": "user",
+  "methods":
+  {
+    "addStableCoin(bytes32,address,address)":
+    {
+      "notice": "Adds a new stablecoin"
+    },
+    "balanceOf(bytes32,address)":
+    {
+      "notice": "Get balance of the stablecoins in the wallet address"
+    },
+    "checkForSufficientBalance(address,bytes32,uint256)":
+    {
+      "notice": "Check for sufficient balance"
+    },
+    "decimals(bytes32)":
+    {
+      "notice": "Gets the decimals of the token"
+    },
+    "deleteStableCoin(bytes32)":
+    {
+      "notice": "Deletes an existing stablecoin"
+    },
+    "getStableCoinsAssociated()":
+    {
+      "notice": "Getter for Stable coins associated"
+    },
+    "initiateTransferFrom(address,address,uint256,bytes32)":
+    {
+      "notice": "Transfers tokens from an external address to the MoToken Address"
+    },
+    "setAccessControlManagerAddress(address)":
+    {
+      "notice": "Setter for accessControlManagerAddress"
+    },
+    "setCurrencyOracleAddress(address)":
+    {
+      "notice": "Allows setting currencyOracleAddress"
+    },
+    "totalBalanceInFiat(address,bytes32)":
+    {
+      "notice": "Gets the total stablecoin balance associated with the MoToken"
+    },
+    "transferFundsToPipe(address,bytes32,uint256)":
+    {
+      "notice": "Transfers tokens from the MoToken address to the stablecoin pipe address"
+    }
+  },
+  "notice": "This handles all stable coin operations related to the token",
+  "version": 1
+}

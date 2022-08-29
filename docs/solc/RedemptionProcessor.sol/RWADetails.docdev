@@ -1,0 +1,192 @@
+{
+  "kind": "dev",
+  "methods":
+  {
+    "addRWAUnits(uint256,uint64)":
+    {
+      "params":
+      {
+        "_id": "contains the id of the RWA unit being added",
+        "_units": "contains the number of RWA units added to the MoH token"
+      }
+    },
+    "createRWAUnit(string,string,string,bytes32,uint128,bool,uint64,uint32,uint32,uint16,uint64,uint64)":
+    {
+      "details": "Explain to a developer any extra details",
+      "params":
+      {
+        "_apy": "daily compounding interest for the unit, used to update price when auto calculation is enabled for the unit.",
+        "_apyLeapYear": "daily compounding interest for the unit during leap year",
+        "_autoCalcFlag": "specifies whether principal should be auto calculated. Only applicable for senior unit type",
+        "_endDate": "specifies the end date for the rwa unit, place holder value, not used in any calculations.",
+        "_fiatCurrency": "fiat currency for the unit",
+        "_name": "is the name of the RWA scheme",
+        "_notionalValue": "initial value of a single RWA unit",
+        "_portfolioDetailsLink": "contains the link for the RWA portfolio details document",
+        "_schemeDocumentLink": "contains the link for the RWA scheme document",
+        "_startDate": "specifies the start date for the rwa unit, mandatory input as this is the start for price calculation.",
+        "_tokenId": "specifies the mo token this unit is linked to. mandatory input as this cannot be set later for the unit.",
+        "_units": "number of units."
+      }
+    },
+    "getRWAUnitsForTokenId(uint256)":
+    {
+      "params":
+      {
+        "_tokenId": "Refers to token id"
+      },
+      "returns":
+      {
+        "rWAUnitsByTokenId": "returns array of RWA Unit IDs associated to tokenId"
+      }
+    },
+    "getRWAValueByTokenId(uint16,bytes32)":
+    {
+      "details": "Explain to a developer any extra details",
+      "params":
+      {
+        "_inCurrency": "currency in which assetValue is to be returned",
+        "_tokenId": "is the MoH token Id for which value of RWA units is being calculated"
+      },
+      "returns":
+      {
+        "assetValue": "real world asset value for the token as per the date in the requested currency."
+      }
+    },
+    "isRedemptionAllowed(uint256)":
+    {
+      "params":
+      {
+        "_id": "Refers to id of the RWA unit"
+      },
+      "returns":
+      {
+        "redemptionAllowed": "Indicates whether the RWA unit can be redeemed."
+      }
+    },
+    "redeemRWAUnits(uint256,uint64)":
+    {
+      "params":
+      {
+        "_id": "contains the id of the RWA unit being redeemed",
+        "_units": "contains the number of RWA units redeemed from the MoH token"
+      }
+    },
+    "setAccessControlManagerAddress(address)":
+    {
+      "params":
+      {
+        "_accessControlManagerAddress": "Set accessControlManagerAddress to this address"
+      }
+    },
+    "setCurrencyOracleAddress(address)":
+    {
+      "params":
+      {
+        "_currencyOracleAddress": "address of the currency oracle"
+      }
+    },
+    "setLeapYear(bool)":
+    {
+      "params":
+      {
+        "_leapYear": "whether current period is in a leap year"
+      }
+    },
+    "setSeniorDefault(uint256,bool)":
+    {
+      "details": "Function emits SeniorDefaultUpdated event which provides value of defaultFlag for the unit id.",
+      "params":
+      {
+        "_defaultFlag": "boolean value to be set.",
+        "_id": "Refers to id of the RWA being updated"
+      }
+    },
+    "udpatePayout(uint16,uint32,uint128)":
+    {
+      "params":
+      {
+        "_date": "Date for which rwa asset value should be updated to.",
+        "_id": "Refers to id of the RWA unit",
+        "_payoutAmount": "payout amount to be subtracted from the unit price."
+      }
+    },
+    "updateAutoCalc(uint256,bool,uint128,uint32,uint64,uint64)":
+    {
+      "details": "Function emits AutoCalcFlagUpdated event which provides id of RWA updated and autoCalcFlag value set.",
+      "params":
+      {
+        "_apy": "Refers to daily compounding interest of the RWA being updated",
+        "_autoCalcFlag": "Refers to autoCalcFlag of the RWA being updated",
+        "_id": "Refers to id of the RWA being updated",
+        "_priceUpdateDate": "Refers to priceUpdateDate of the RWA being updated",
+        "_unitPrice": "Refers to unitPrice of the RWA being updated"
+      }
+    },
+    "updateRWAUnitDetails(uint256,string,uint128,uint32)":
+    {
+      "details": "Function emits RWAUnitDetailsUpdated event which provides id of RWA updated, unit price updated and price update date",
+      "params":
+      {
+        "_id": "Refers to id of the RWA being updated",
+        "_portfolioDetailsLink": "stores the link to the file containing details of the RWA portfolio and unit price",
+        "_priceUpdateDate": "stores the last date on which the RWA unit price was updated by RWA Manager",
+        "_unitPrice": "stores the price of a single RWA unit"
+      }
+    },
+    "updateRWAUnitSchemeDocumentLink(uint256,string)":
+    {
+      "details": "Function emits RWAUnitSchemeDocumentLinkUpdated event which provides id of RWA scheme update and the updated scheme document link",
+      "params":
+      {
+        "_id": "contains the id of the RWA being updated",
+        "_schemeDocumentLink": "stores the link to the RWA scheme document"
+      }
+    },
+    "updateRWAUnitValue(uint16,uint32)":
+    {
+      "params":
+      {
+        "_date": "Date for which rwa asset value should be updated to.",
+        "_id": "Refers to id of the RWA unit"
+      }
+    }
+  },
+  "stateVariables":
+  {
+    "MO_DECIMALS":
+    {
+      "details": "All assets are stored with 4 decimal shift unless specified"
+    },
+    "accessControlManagerAddress":
+    {
+      "details": "Implements RWA manager and whitelist access"
+    },
+    "currencyOracleAddress":
+    {
+      "details": "Currency Oracle Address contract associated with RWA unit"
+    },
+    "leapYear":
+    {
+      "details": "used to determine number of days in asset value calculation"
+    },
+    "rWAUnitDetails":
+    {
+      "details": "mapping between unit id and additional details"
+    },
+    "rWAUnitId":
+    {
+      "details": "unique identifier for the rwa unit"
+    },
+    "rWAUnits":
+    {
+      "details": "mapping between the id and the struct"
+    },
+    "tokenIdToRWAUnitId":
+    {
+      "details": "mapping of tokenId to rWAUnitIds . Used for calculating asset value for a tokenId."
+    }
+  },
+  "title": "Real World Asset Details",
+  "version": 1
+}

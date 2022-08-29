@@ -1,0 +1,104 @@
+{
+  "kind": "user",
+  "methods":
+  {
+    "approveNav()":
+    {
+      "notice": "If the change in NAV is more than navDeviationAllowance, it has to be approved by Admin"
+    },
+    "constructor":
+    {
+      "notice": "Constructor instantiates access control"
+    },
+    "creditPipeFiat(uint64,uint32)":
+    {
+      "notice": "The function allows RWA manger to provide the increase in pipe fiat balances against the MoH token"
+    },
+    "debitPipeFiat(uint64,uint32)":
+    {
+      "notice": "The function allows RWA manger to decrease pipe fiat balances against the MoH token"
+    },
+    "getId()":
+    {
+      "notice": "Returns the token id for the associated token."
+    },
+    "getNAV()":
+    {
+      "notice": "Provides the NAV of the MoH token"
+    },
+    "initialize(uint16,address,address,uint64,address)":
+    {
+      "notice": "Initializes basic properties associated with the token"
+    },
+    "owner()":
+    {
+      "notice": "returns the owner address"
+    },
+    "purchase(uint256,bytes32)":
+    {
+      "notice": "This function is called by the purchaser of MoH tokens. The protocol transfers _depositCurrency from the purchaser and mints and transfers MoH token to the purchaser"
+    },
+    "setAccessControlManagerAddress(address)":
+    {
+      "notice": "Setter for accessControlManagerAddress"
+    },
+    "setCurrencyOracleAddress(address)":
+    {
+      "notice": "Allows setting currencyOracleAddress"
+    },
+    "setDaysInAYear(uint16)":
+    {
+      "notice": "Sets days in a year to be used in fee calculation."
+    },
+    "setFee(uint32)":
+    {
+      "notice": "Setter for platform fee"
+    },
+    "setFiatCurrency(bytes32)":
+    {
+      "notice": "Allows setting fiatCurrecy associated with tokens"
+    },
+    "setLinkedSrRwaUnitId(uint256)":
+    {
+      "notice": "Sets the RWA unit ID corresponding to the junior RWA Unit ID"
+    },
+    "setNavDeviationAllowance(uint16)":
+    {
+      "notice": "Allows setting NAV deviation allowance by Owner"
+    },
+    "setPlatformFeeCurrency(bytes32)":
+    {
+      "notice": "Setter for platform fee currency"
+    },
+    "setRWADetailsAddress(address)":
+    {
+      "notice": "Setter for RWADetails contract associated with the MoToken"
+    },
+    "setStableCoinAddress(address)":
+    {
+      "notice": "Setter for stableCoin"
+    },
+    "setTokenSupplyLimit(uint256)":
+    {
+      "notice": "Allows setting tokenSupplyLimit associated with tokens"
+    },
+    "stableCoinToTokens(uint256,bytes32)":
+    {
+      "notice": "Converts stable coin amount to token amount"
+    },
+    "sweepFeeToGov(uint256)":
+    {
+      "notice": "Raise request for platform fee transfer to governor"
+    },
+    "updateFiatInTransit(uint64)":
+    {
+      "notice": "Sets fiat in transit amount"
+    },
+    "updateNav(uint32)":
+    {
+      "notice": "The function allows the RWA manager to update the NAV. NAV = (Asset value of AFI _ pipe fiat stash in Fiat + stablecoin balance) / Total supply of the MoH token."
+    }
+  },
+  "notice": "This is a token manager which handles all operations related to the token",
+  "version": 1
+}

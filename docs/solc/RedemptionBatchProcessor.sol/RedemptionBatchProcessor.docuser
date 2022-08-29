@@ -1,0 +1,60 @@
+{
+  "kind": "user",
+  "methods":
+  {
+    "cancelRedeemRequest(uint256)":
+    {
+      "notice": "Cancel an existing redeem in the given batch"
+    },
+    "constructor":
+    {
+      "notice": "Constructor initializes token manager"
+    },
+    "createBatch()":
+    {
+      "notice": "Creates a new batch"
+    },
+    "createRedeemRequest(uint256)":
+    {
+      "notice": "Create a new redeem request in the current batch"
+    },
+    "fulfillBatch(uint256,uint256)":
+    {
+      "notice": "Fulfill the redeem requests in the given batch"
+    },
+    "getBatchRequestDetails(uint256,address)":
+    {
+      "notice": "Getter for Request details"
+    },
+    "getBatchTokensPending(uint256)":
+    {
+      "notice": "Getter for tokens pending redemption in the whole batch"
+    },
+    "getBatchUsers(uint256)":
+    {
+      "notice": "Getter for all the users who have raised redemption request"
+    },
+    "getLockedTokens()":
+    {
+      "notice": "User can call this function to get total amount of tokens locked for redemption"
+    },
+    "setAccessControlManagerAddress(address)":
+    {
+      "notice": "Setter for accessControlManagerAddress"
+    },
+    "setAssignedRefundCoin(bytes32)":
+    {
+      "notice": "Setter for assigned refund coin"
+    },
+    "setCurrencyOracleAddress(address)":
+    {
+      "notice": "Allows setting currencyOracleAddress"
+    },
+    "setFiatCurrency(bytes32)":
+    {
+      "notice": "Allows setting fiatCurrecy"
+    }
+  },
+  "notice": "This contract handles the token redemption process",
+  "version": 1
+}
