@@ -49,7 +49,7 @@ contract MoTokenManagerFactory is Ownable {
     ) external onlyOwner {
         MoToken mt = MoToken(_token);
         string memory tokenSymbol = mt.symbol();
-        require((bytes(tokenSymbol).length > 0), "AE");
+        require((bytes(tokenSymbol).length > 0), "IT");
 
         bytes32 tokenBytes = StringUtil.stringToBytes32(tokenSymbol);
         require(symbolToTokenManager[tokenBytes] == address(0), "AE");

@@ -16,7 +16,15 @@ contract AccessControlManager is AccessControlEnumerable {
         _setRoleAdmin(CRON_MANAGER_ROLE, ADMIN_ROLE);
     }
 
-    function isOwner(address account) external view returns (bool) {
+    function changeRoleAdmin(bytes32 role, bytes32 newAdminRole)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
+        require(role != DEFAULT_ADMIN_ROLE, "NA");
+        _setRoleAdmin(role, newAdminRole);
+    }
+
+    function isOwner(address account) public view returns (bool) {
         return hasRole(DEFAULT_ADMIN_ROLE, account);
     }
 

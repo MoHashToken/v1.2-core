@@ -138,7 +138,7 @@ contract MoToken is ERC20PresetMinterPauser {
         address to,
         uint256 amount
     ) internal virtual override {
-        if (to == address(0) || amount == 0) return;
+        if (to == address(0) || to == address(this)) return;
         _onlywhitelisted(to);
 
         if (seniorTokenAddress != address(0)) {

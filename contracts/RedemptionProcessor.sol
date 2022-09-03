@@ -533,25 +533,34 @@ contract RedemptionProcessor {
         view
         returns (bool)
     {
-        address tokenManagerAddress = MoTokenManagerFactory(
+        bool flag = false;
+        MoTokenManagerFactory moTokenManagerFactory = MoTokenManagerFactory(
             tokenManagerFactoryAddress
-        ).symbolToTokenManager(_tokenSymbol);
-        MoTokenManager tokenManager = MoTokenManager(tokenManagerAddress);
-        address seniorTokenAddress = MoToken(tokenManager.token())
-            .seniorTokenAddress();
+        );
+        while (true) {
+            address tokenManagerAddress = moTokenManagerFactory
+                .symbolToTokenManager(_tokenSymbol);
+            MoTokenManager tokenManager = MoTokenManager(tokenManagerAddress);
+            address seniorTokenAddress = MoToken(tokenManager.token())
+                .seniorTokenAddress();
 
-        if (seniorTokenAddress == address(0)) {
-            return true;
+            if (seniorTokenAddress == address(0)) {
+                flag = true;
+                break;
+            }
+
+            RWADetails rwaDetails = RWADetails(tokenManager.rWADetails());
+            if (
+                !rwaDetails.isRedemptionAllowed(
+                    tokenManager.linkedSrRwaUnitId()
+                )
+            ) {
+                break;
+            }
+            _tokenSymbol = StringUtil.stringToBytes32(
+                MoToken(seniorTokenAddress).symbol()
+            );
         }
-
-        RWADetails rwaDetails = RWADetails(tokenManager.rWADetails());
-        if (rwaDetails.isRedemptionAllowed(tokenManager.linkedSrRwaUnitId()))
-            return
-                isRedemptionAllowed(
-                    StringUtil.stringToBytes32(
-                        MoToken(seniorTokenAddress).symbol()
-                    )
-                );
-        return false;
+        return flag;
     }
 }

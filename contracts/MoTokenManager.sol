@@ -91,6 +91,7 @@ contract MoTokenManager {
     event AccessControlManagerSet(address indexed accessControlAddress);
     event CurrencyOracleAddressSet(address indexed currencyOracleAddress);
     event StableCoinAddressSet(address indexed stableCoinAddress);
+    event dividend(address account, uint256 dividendAmount, uint256 moBal);
 
     /// @notice Constructor instantiates access control
 
@@ -513,5 +514,42 @@ contract MoTokenManager {
 
     function updateFiatInTransit(uint64 _fiatAmount) external onlyCronManager {
         tokenData.fiatInTransit = _fiatAmount;
+    }
+
+    /// @notice pays dividend to all the Mo Token holders, amount is total dividend amount for the current total token supply
+    /// @param _amount stable coin amount (stable coin decimal shifted)
+
+    function payoutDividend(uint256 _amount) external onlyRWAManager {
+        StableCoin sCoin = StableCoin(stableCoinAddress);
+        require((sCoin.balanceOf(platformFeeCurrency, token)) >= _amount);
+
+        AccessControlManager acm = AccessControlManager(
+            accessControlManagerAddress
+        );
+
+        MoToken moToken = MoToken(token);
+
+        uint256 dividendAmount = (_amount * (10**8)) / moToken.totalSupply();
+
+        for (
+            uint256 i = 0;
+            i < acm.getRoleMemberCount(acm.WHITELIST_ROLE());
+            ++i
+        ) {
+            address account = acm.getRoleMember(acm.WHITELIST_ROLE(), i);
+            uint256 moBalance = moToken.balanceOf(account);
+            if (moBalance > 0) {
+                uint256 dividendToPay = (moBalance * dividendAmount) / (10**8);
+                require(
+                    moToken.transferStableCoins(
+                        sCoin.contractAddressOf(platformFeeCurrency),
+                        account,
+                        dividendToPay
+                    )
+                );
+
+                emit dividend(account, dividendToPay, moBalance);
+            }
+        }
     }
 }
