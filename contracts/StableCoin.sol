@@ -198,14 +198,14 @@ contract StableCoin {
     /// @notice Transfers tokens from an external address to the MoToken Address
     /// @param _token Token address
     /// @param _from Transfer tokens from this address
-    /// @param _amount Amount to transfer
+    /// @param _stableCoinAmount Amount to transfer
     /// @param _symbol Symbol of the tokens to transfer
     /// @return bool Boolean indicating transfer success/failure
 
     function initiateTransferFrom(
         address _token,
         address _from,
-        uint256 _amount,
+        uint256 _stableCoinAmount,
         bytes32 _symbol
     ) external returns (bool) {
         require(contractAddressOf[_symbol] != address(0), "NC");
@@ -214,30 +214,30 @@ contract StableCoin {
             moToken.receiveStableCoins(
                 contractAddressOf[_symbol],
                 _from,
-                _amount
+                _stableCoinAmount
             )
         );
     }
 
     /// @notice Transfers tokens from the MoToken address to the stablecoin pipe address
     /// @param _token Token address
-    /// @param _amount Amount to transfer
+    /// @param _stableCoinAmount Amount to transfer
     /// @param _symbol Symbol of the tokens to transfer
     /// @return bool Boolean indicating transfer success/failure
 
     function transferFundsToPipe(
         address _token,
         bytes32 _symbol,
-        uint256 _amount
+        uint256 _stableCoinAmount
     ) external onlyRWAManager returns (bool) {
-        checkForSufficientBalance(_token, _symbol, _amount);
+        checkForSufficientBalance(_token, _symbol, _stableCoinAmount);
 
         MoToken moToken = MoToken(_token);
         return (
             moToken.transferStableCoins(
                 contractAddressOf[_symbol],
                 pipeAddressOf[_symbol],
-                _amount
+                _stableCoinAmount
             )
         );
     }

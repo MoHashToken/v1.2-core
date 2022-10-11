@@ -19,6 +19,9 @@ contract MoTokenManager {
     /// @dev Limits the total supply of the token.
     uint256 public tokenSupplyLimit;
 
+    /// @dev Token Supply in the NAV approval flow
+    uint256 public tokenSupplyUnapproved;
+
     /// @dev Implements RWA manager and whitelist access
     address public accessControlManagerAddress;
 
@@ -261,6 +264,7 @@ contract MoTokenManager {
     /// @param _value Allowed deviation limit (Eg: 10 for 10% deviation)
 
     function setNavDeviationAllowance(uint16 _value) external onlyOwner {
+        require(_value < 100, "IN");
         tokenData.navDeviationAllowance = _value;
     }
 
@@ -304,14 +308,14 @@ contract MoTokenManager {
     /// @notice This function is called by the purchaser of MoH tokens. The protocol transfers _depositCurrency
     /// from the purchaser and mints and transfers MoH token to the purchaser
     /// @dev tokenData.nav has the NAV (in USD) of the MoH token. The number of MoH tokens to mint = _depositAmount (in USD) / NAV
-    /// @param _depositAmount is the amount in stable coin (decimal shifted) that the purchaser wants to pay to buy MoH tokens
+    /// @param _stableCoinAmount is the amount in stable coin (decimal shifted) that the purchaser wants to pay to buy MoH tokens
     /// @param _depositCurrency is the token that purchaser wants to pay with (eg: USDC, USDT etc)
 
-    function purchase(uint256 _depositAmount, bytes32 _depositCurrency)
+    function purchase(uint256 _stableCoinAmount, bytes32 _depositCurrency)
         external
     {
         uint256 tokensToMint = stableCoinToTokens(
-            _depositAmount,
+            _stableCoinAmount,
             _depositCurrency
         );
 
@@ -327,7 +331,7 @@ contract MoTokenManager {
             sCoin.initiateTransferFrom({
                 _token: token,
                 _from: msg.sender,
-                _amount: _depositAmount,
+                _stableCoinAmount: _stableCoinAmount,
                 _symbol: _depositCurrency
             }),
             "PF"
@@ -339,11 +343,11 @@ contract MoTokenManager {
     }
 
     /// @notice Converts stable coin amount to token amount
-    /// @param _amount Stable coin amount
+    /// @param _stableCoinAmount Stable coin amount
     /// @param _stableCoin Stable coin symbol
     /// @return tokens Calculated token amount
 
-    function stableCoinToTokens(uint256 _amount, bytes32 _stableCoin)
+    function stableCoinToTokens(uint256 _stableCoinAmount, bytes32 _stableCoin)
         public
         view
         returns (uint256 tokens)
@@ -359,7 +363,7 @@ contract MoTokenManager {
             int8(sCoin.decimals(_stableCoin)) -
             int8(decimalsVal);
 
-        tokens = _amount * stableToFiatConvRate;
+        tokens = _stableCoinAmount * stableToFiatConvRate;
         if (decimalCorrection > -1) {
             tokens = tokens * 10**uint8(decimalCorrection);
         } else {
@@ -370,26 +374,26 @@ contract MoTokenManager {
     }
 
     /// @notice The function allows RWA manger to provide the increase in pipe fiat balances against the MoH token
-    /// @param _amount the amount by which RWA manager is increasing the pipeFiatStash of the MoH token
+    /// @param _fiatAmount the amount by which RWA manager is increasing the pipeFiatStash of the MoH token
     /// @param _date RWA manager is crediting pipe fiat for this date
 
-    function creditPipeFiat(uint64 _amount, uint32 _date)
+    function creditPipeFiat(uint64 _fiatAmount, uint32 _date)
         external
         onlyCronManager
     {
-        tokenData.pipeFiatStash += _amount;
+        tokenData.pipeFiatStash += _fiatAmount;
         emit FiatCredited(tokenData.pipeFiatStash, _date);
     }
 
     /// @notice The function allows RWA manger to decrease pipe fiat balances against the MoH token
-    /// @param _amount the amount by which RWA manager is decreasing the pipeFiatStash of the MoH token
+    /// @param _fiatAmount the amount by which RWA manager is decreasing the pipeFiatStash of the MoH token
     /// @param _date RWA manager is debiting pipe fiat for this date
 
-    function debitPipeFiat(uint64 _amount, uint32 _date)
+    function debitPipeFiat(uint64 _fiatAmount, uint32 _date)
         external
         onlyCronManager
     {
-        tokenData.pipeFiatStash -= _amount;
+        tokenData.pipeFiatStash -= _fiatAmount;
         emit FiatDebited(tokenData.pipeFiatStash, _date);
     }
 
@@ -428,6 +432,7 @@ contract MoTokenManager {
         ) {
             tokenData.navUnapproved = navCalculated;
             tokenData.navApprovalRequestTimestamp = _timestamp;
+            tokenSupplyUnapproved = totalSupply;
             emit NAVApprovalRequest(tokenData.navUnapproved, _timestamp);
         } else {
             tokenData.nav = navCalculated;
@@ -443,13 +448,11 @@ contract MoTokenManager {
     function approveNav() external onlyRWAManager {
         require(tokenData.navUnapproved > 0, "NA");
 
-        MoToken moToken = MoToken(token);
-
         tokenData.nav = tokenData.navUnapproved;
         tokenData.navUnapproved = 0;
         accrueFee(
             tokenData.navApprovalRequestTimestamp,
-            tokenData.nav * moToken.totalSupply()
+            (tokenData.nav * tokenSupplyUnapproved) / tokenDecimals
         );
         tokenData.navUpdateTimestamp = tokenData.navApprovalRequestTimestamp;
         emit NAVUpdated(tokenData.nav, tokenData.navUpdateTimestamp);
@@ -478,10 +481,13 @@ contract MoTokenManager {
     }
 
     /// @notice Transfers accrued fees to governor
-    /// @param _amount amount in FiatCurrency
+    /// @param _fiatAmount amount in FiatCurrency
     /// @return bool Boolean indicating transfer success/failure
 
-    function transferFeeToGovernor(uint256 _amount) internal returns (bool) {
+    function transferFeeToGovernor(uint256 _fiatAmount)
+        internal
+        returns (bool)
+    {
         CurrencyOracle currencyOracle = CurrencyOracle(currencyOracleAddress);
         (uint64 stableToFiatConvRate, uint8 decimalsVal) = currencyOracle
             .getFeedLatestPriceAndDecimals(platformFeeCurrency, fiatCurrency);
@@ -490,7 +496,8 @@ contract MoTokenManager {
         uint8 finalDecVal = decimalsVal +
             sCoin.decimals(platformFeeCurrency) -
             MO_DECIMALS;
-        uint256 amount = ((_amount * (10**finalDecVal)) / stableToFiatConvRate);
+        uint256 amount = ((_fiatAmount * (10**finalDecVal)) /
+            stableToFiatConvRate);
 
         MoToken moToken = MoToken(token);
         return (
@@ -517,11 +524,13 @@ contract MoTokenManager {
     }
 
     /// @notice pays dividend to all the Mo Token holders, amount is total dividend amount for the current total token supply
-    /// @param _amount stable coin amount (stable coin decimal shifted)
+    /// @param _stableCoinAmount stable coin amount (stable coin decimal shifted)
 
-    function payoutDividend(uint256 _amount) external onlyRWAManager {
+    function payoutDividend(uint256 _stableCoinAmount) external onlyRWAManager {
         StableCoin sCoin = StableCoin(stableCoinAddress);
-        require((sCoin.balanceOf(platformFeeCurrency, token)) >= _amount);
+        require(
+            (sCoin.balanceOf(platformFeeCurrency, token)) >= _stableCoinAmount
+        );
 
         AccessControlManager acm = AccessControlManager(
             accessControlManagerAddress
@@ -529,7 +538,8 @@ contract MoTokenManager {
 
         MoToken moToken = MoToken(token);
 
-        uint256 dividendAmount = (_amount * (10**8)) / moToken.totalSupply();
+        uint256 dividendAmount = (_stableCoinAmount * (10**8)) /
+            moToken.totalSupply();
 
         for (
             uint256 i = 0;
@@ -540,15 +550,16 @@ contract MoTokenManager {
             uint256 moBalance = moToken.balanceOf(account);
             if (moBalance > 0) {
                 uint256 dividendToPay = (moBalance * dividendAmount) / (10**8);
-                require(
-                    moToken.transferStableCoins(
-                        sCoin.contractAddressOf(platformFeeCurrency),
-                        account,
-                        dividendToPay
-                    )
-                );
-
-                emit dividend(account, dividendToPay, moBalance);
+                if (dividendToPay > 0) {
+                    require(
+                        moToken.transferStableCoins(
+                            sCoin.contractAddressOf(platformFeeCurrency),
+                            account,
+                            dividendToPay
+                        )
+                    );
+                    emit dividend(account, dividendToPay, moBalance);
+                }
             }
         }
     }

@@ -148,7 +148,11 @@ contract MoTokenTrader {
         );
 
         totalTokensListedOf[_tokenSymbol][msg.sender] += _tokens;
-        require(token.allowance(msg.sender, address(this)) >= _tokens, "NP");
+        require(
+            token.allowance(msg.sender, address(this)) >=
+                totalTokensListedOf[_tokenSymbol][msg.sender],
+            "NP"
+        );
 
         allListings.push();
 
@@ -215,13 +219,17 @@ contract MoTokenTrader {
                     token.balanceOf(msg.sender) -
                         totalTokensListedOf[allListings[_id].tokenSymbol][
                             msg.sender
-                        ],
+                        ] +
+                        allListings[_id].listedTokens,
                 "NT"
             );
             require(
                 token.allowance(msg.sender, address(this)) >=
-                    ((_tokens - allListings[_id].listedTokens) +
-                        allListings[_id].listedTokensPending),
+                    totalTokensListedOf[allListings[_id].tokenSymbol][
+                        msg.sender
+                    ] +
+                        _tokens -
+                        allListings[_id].listedTokens,
                 "NP"
             );
         }

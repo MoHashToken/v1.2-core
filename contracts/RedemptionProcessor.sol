@@ -285,12 +285,12 @@ contract RedemptionProcessor {
     /// & updates the request details in allTokenRequestsDetails array
     /// @param _tokenSymbol Symbol of the token for which request details are to be fulfilled
     /// @param _index Index of the request to be fulfilled
-    /// @param _amount Amount is in fiat curreny with motoken decimals shifted
+    /// @param _fiatAmount Amount is in fiat curreny with motoken decimals shifted
 
     function fulfill(
         bytes32 _tokenSymbol,
         uint256 _index,
-        uint256 _amount
+        uint256 _fiatAmount
     ) external onlyRWAManager {
         require(uint16(tokenSymbolToId[_tokenSymbol]) != uint16(0), "NTS");
         require(isRedemptionAllowed(_tokenSymbol), "IN");
@@ -313,8 +313,9 @@ contract RedemptionProcessor {
 
         MoTokenManager manager = MoTokenManager(tokenManagerAddress);
 
-        uint256 refundTokens = (_amount * 10**MO_DECIMALS) / (manager.getNAV());
-        uint256 refundAmount = _amount;
+        uint256 refundTokens = (_fiatAmount * 10**MO_DECIMALS) /
+            (manager.getNAV());
+        uint256 refundAmount = _fiatAmount;
 
         if (refundTokens > request.requestTokensPending) {
             refundTokens = request.requestTokensPending;

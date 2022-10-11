@@ -258,10 +258,10 @@ contract RedemptionBatchProcessor {
 
     /// @notice Fulfill the redeem requests in the given batch
     /// @param _id Batch Id
-    /// @param _amount The Fiat amount which is used to issue refunds,
+    /// @param _fiatAmount The Fiat amount which is used to issue refunds,
     /// should be shifted by 4 decimals (same as mo token)
 
-    function fulfillBatch(uint256 _id, uint256 _amount)
+    function fulfillBatch(uint256 _id, uint256 _fiatAmount)
         external
         onlyRWAManager
     {
@@ -275,7 +275,7 @@ contract RedemptionBatchProcessor {
         MoToken token = MoToken(manager.token());
 
         uint256 nav = uint256(manager.getNAV());
-        uint256 refundTokens = (_amount * 10**MO_DECIMALS) / nav;
+        uint256 refundTokens = (_fiatAmount * 10**MO_DECIMALS) / nav;
 
         if (refundTokens > allBatches[_id].batchTokensPending)
             refundTokens = allBatches[_id].batchTokensPending;
@@ -289,7 +289,7 @@ contract RedemptionBatchProcessor {
             StableCoin(stableCoinAddress).checkForSufficientBalance(
                 manager.token(),
                 assignedRefundCoin,
-                (_amount * 10**decimalsVal) /
+                (_fiatAmount * 10**decimalsVal) /
                     10**uint8(decimalsDiff) /
                     stableToFiatConvRate
             );
@@ -297,7 +297,7 @@ contract RedemptionBatchProcessor {
             StableCoin(stableCoinAddress).checkForSufficientBalance(
                 manager.token(),
                 assignedRefundCoin,
-                (_amount * 10**decimalsVal * 10**uint8(-decimalsDiff)) /
+                (_fiatAmount * 10**decimalsVal * 10**uint8(-decimalsDiff)) /
                     stableToFiatConvRate
             );
         }
@@ -309,7 +309,6 @@ contract RedemptionBatchProcessor {
                 itr++
             ) {
                 address user = allBatches[_id].userList[itr];
-
                 RedemptionRequest storage request = allBatches[_id].requests[
                     user
                 ];
@@ -340,16 +339,20 @@ contract RedemptionBatchProcessor {
             closeBatches();
             emit BatchFulfilled(_id, refundTokens, true);
         } else {
+            uint256 issuedRefunds;
             for (
                 uint256 itr = 0;
                 itr < allBatches[_id].userList.length;
                 itr++
             ) {
                 address user = allBatches[_id].userList[itr];
-                uint256 userRefund = (allBatches[_id]
-                    .requests[user]
-                    .requestTokensPending * refundTokens) /
-                    allBatches[_id].batchTokensPending;
+                RedemptionRequest storage request = allBatches[_id].requests[
+                    user
+                ];
+
+                uint256 userRefund = (request.requestTokensPending *
+                    refundTokens) / allBatches[_id].batchTokensPending;
+                issuedRefunds += userRefund;
                 // refund amount in fiat
                 uint256 refundAmount = (userRefund * nav);
                 if (
@@ -367,15 +370,15 @@ contract RedemptionBatchProcessor {
                 refundAmount =
                     (refundAmount * (10**decimalsVal)) /
                     stableToFiatConvRate;
-                allBatches[_id].requests[user].requestTokensPending =
-                    allBatches[_id].requests[user].requestTokensPending -
+                request.requestTokensPending =
+                    request.requestTokensPending -
                     userRefund;
                 require(_transferStableCoins(user, refundAmount), "TSOF");
                 token.burn(userRefund, manager.token());
             }
             allBatches[_id].batchTokensPending =
                 allBatches[_id].batchTokensPending -
-                refundTokens;
+                issuedRefunds;
             emit BatchFulfilled(_id, refundTokens, false);
         }
     }
