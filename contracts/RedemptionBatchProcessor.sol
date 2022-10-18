@@ -330,7 +330,10 @@ contract RedemptionBatchProcessor {
                 refundAmount =
                     (refundAmount * (10**decimalsVal)) /
                     stableToFiatConvRate;
-                require(_transferStableCoins(user, refundAmount), "TSOF");
+                if (refundAmount > 0) {
+                    require(_transferStableCoins(user, refundAmount), "TSOF");
+                }
+
                 token.burn(request.requestTokensPending, manager.token());
                 request.requestTokensPending = 0;
             }
@@ -373,7 +376,9 @@ contract RedemptionBatchProcessor {
                 request.requestTokensPending =
                     request.requestTokensPending -
                     userRefund;
-                require(_transferStableCoins(user, refundAmount), "TSOF");
+                if (refundAmount > 0) {
+                    require(_transferStableCoins(user, refundAmount), "TSOF");
+                }
                 token.burn(userRefund, manager.token());
             }
             allBatches[_id].batchTokensPending =
